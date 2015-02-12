@@ -1,0 +1,103 @@
+package Sarah;
+
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Scanner;
+
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import YaoGC.CompositeCircuit;
+import YaoGC.XOR_2_1;
+
+public class MyCircuit extends CompositeCircuit{
+	int nSubCircuits = 5;
+	static int bit;
+	static HashMap<String, KeyPair> hm = new HashMap<String, KeyPair>();
+	static HashMap<String, Cipher> gc = new HashMap<String, Cipher>();
+	static Cipher aesCipher;
+	public MyCircuit(int inDegree, int outDegree, int nSubCircuits, String name) {
+		super(3, 2, 5, "ADD_3_2");
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected void connectWires() throws Exception {
+		// TODO Auto-generated method stub
+		//inputWires[X].connectTo(subCircuits[XOR0].inputWires, 0); 
+		//inputWires[CIN].connectTo(subCircuits[XOR0].inputWires, 1); 
+	}
+
+	@Override
+	protected void defineOutputWires() {
+		// TODO Auto-generated method stub
+		
+	}
+	//makea public key.
+	//Public key encryption. A technology that allows two parties 
+	//to share secret messages without prior agreement on secret keys
+	static KeyPair makeKey() throws NoSuchAlgorithmException{
+		//http://www.javamex.com/tutorials/cryptography/rsa_encryption.shtml
+		KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+		//needs to be atleast 512
+		kpg.initialize(512);
+		KeyPair kp = kpg.genKeyPair();
+		//Key publicKey = kp.getPublic();
+		//Key privateKey = kp.getPrivate();
+		return kp;
+	}
+	//I put the keys in a hashmap
+	static void aliceSixKeys() throws NoSuchAlgorithmException{
+		hm.put("kx0", makeKey());
+		hm.put("kx1", makeKey());
+		hm.put("ky0", makeKey());
+		hm.put("ky1", makeKey());
+		hm.put("kz0", makeKey());
+		hm.put("kz1", makeKey());
+	}
+
+	//make double encryptions and wrap the key
+	static void doubleEncryption(HashMap<String, KeyPair> hash, HashMap<String, Cipher> ciphers) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException{
+		Cipher aesCipher00 = Cipher.getInstance("AES");
+		aesCipher00.init(Cipher.ENCRYPT_MODE, hash.get("ky0").getPublic());
+		aesCipher00.init(Cipher.ENCRYPT_MODE, hash.get("kx0").getPublic());
+		aesCipher00.wrap(hash.get("kz0").getPublic());
+		Cipher aesCipher01 = Cipher.getInstance("AES");
+		aesCipher01.init(Cipher.ENCRYPT_MODE, hash.get("kx0").getPublic());
+		aesCipher01.init(Cipher.ENCRYPT_MODE, hash.get("ky1").getPublic());
+		aesCipher01.wrap(hash.get("kz1").getPublic());
+		Cipher aesCipher10 = Cipher.getInstance("AES");
+		aesCipher10.init(Cipher.ENCRYPT_MODE, hash.get("kx1").getPublic());
+		aesCipher10.init(Cipher.ENCRYPT_MODE, hash.get("ky0").getPublic());
+		aesCipher10.wrap(hash.get("kz1").getPublic());
+		Cipher aesCipher11 = Cipher.getInstance("AES");
+		aesCipher11.init(Cipher.ENCRYPT_MODE, hash.get("kx1").getPublic());
+		aesCipher11.init(Cipher.ENCRYPT_MODE, hash.get("ky1").getPublic());
+		aesCipher11.wrap(hash.get("kz0").getPublic());
+		gc.put("line00", aesCipher00);
+		gc.put("line01", aesCipher01);
+		gc.put("line10", aesCipher10);
+		gc.put("line11", aesCipher11);
+	}
+	protected void createSubCircuits() throws Exception{
+		for (int i = 0; i < nSubCircuits; i++)
+			subCircuits[i] = new XOR_2_1();
+	super.createSubCircuits();
+	}
+	public static void main (String args[]) throws Exception{
+		String s;
+		Scanner in = new Scanner(System.in);
+	    System.out.println("Please enter Alice bit");
+	    s = in.nextLine();
+	    System.out.println("The Alice bit is "+s);
+	    bit =Integer.parseInt(s);
+	    aliceSixKeys();
+	    System.out.println(hm.get("kz1").getPublic().toString());
+	}
+
+}

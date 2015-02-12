@@ -1,0 +1,44 @@
+package Sarah;
+
+import java.util.Scanner;
+
+import YaoGC.CompositeCircuit;
+import YaoGC.XOR_2_1;
+
+public class MyCircuit extends CompositeCircuit{
+	int nSubCircuits = 5;
+	static int bit;
+
+	public MyCircuit(int inDegree, int outDegree, int nSubCircuits, String name) {
+		super(3, 2, 5, "ADD_3_2");
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected void connectWires() throws Exception {
+		// TODO Auto-generated method stub
+		//inputWires[X].connectTo(subCircuits[XOR0].inputWires, 0); 
+		//inputWires[CIN].connectTo(subCircuits[XOR0].inputWires, 1); 
+	}
+
+	@Override
+	protected void defineOutputWires() {
+		// TODO Auto-generated method stub
+		
+	}
+	protected void createSubCircuits() throws Exception{
+		for (int i = 0; i < nSubCircuits; i++)
+			subCircuits[i] = new XOR_2_1();
+	super.createSubCircuits();
+	}
+	public static void main (String args[]) throws Exception{
+		String s;
+		Scanner in = new Scanner(System.in);
+	    System.out.println("Enter a string");
+	    s = in.nextLine();
+	    System.out.println("You entered string "+s);
+	    bit =Integer.parseInt(s);
+       
+	}
+
+}

@@ -1,0 +1,17 @@
+import java.security.Provider;
+import java.security.Security;
+//Source from Internet I didn't used this in my assignment
+
+
+public class findAvailableCipherAlgorithms {
+	public static void main (String args[]) throws Exception{
+
+	    for (Provider provider: Security.getProviders()) {
+	    	  System.out.println(provider.getName());
+	    	  for (String key: provider.stringPropertyNames())
+	    	    System.out.println("\t" + key + "\t" + provider.getProperty(key));
+	    	}
+	}
+
+
+}

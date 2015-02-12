@@ -1,0 +1,5 @@
+package YaoGC;
+
+public class MyCircuit extends CompositeCircuits {
+
+}

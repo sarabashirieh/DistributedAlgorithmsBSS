@@ -1,0 +1,208 @@
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
+import java.security.Security;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.Random;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import org.apache.commons.codec.binary.Base64;
+
+public class SarahGarbledCircuit {
+	int nSubCircuits = 5;
+	static int bobBit,aliceBit;
+	static HashMap<String, KeyPair> hm = new HashMap<String, KeyPair>();
+	static HashMap<String, Cipher> gc = new HashMap<String, Cipher>();
+	static Cipher aesCipher;
+	//static byte[][] garbLineChosen;
+	static byte[][] garbLineChosen = new byte[2][];
+	//Oblivious transfer part.
+	static Key alicePublicKey,alicePrivateKey;
+	static int n;
+	//static byte[] b = new byte[3];
+	static Random random = new Random();
+	static int r0,r1,rk,v,msg0,msg1;
+	
+	//make a public key.
+	//Public key encryption. A technology that allows two parties 
+	//to share secret messages without prior agreement on secret keys
+	static KeyPair makeKey() throws NoSuchAlgorithmException{
+		//http://www.javamex.com/tutorials/cryptography/rsa_encryption.shtml
+		KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+		//needs to be at least 512
+		kpg.initialize(512);
+		KeyPair kp = kpg.generateKeyPair();
+		//Key publicKey = kp.getPublic();
+		//Key privateKey = kp.getPrivate();
+		return kp;
+
+	}
+	//I put the keys in a hashmap
+	static void aliceSixKeys() throws NoSuchAlgorithmException{
+			hm.put("kx0", makeKey());
+			hm.put("kx1", makeKey());
+			hm.put("ky0", makeKey());
+			hm.put("ky1", makeKey());
+			hm.put("kz0", makeKey());
+			hm.put("kz1", makeKey());
+		}
+		//make double encryptions and wrap the key and save the Garbled circuit in a hashmap.
+		static void doubleEncryption(HashMap<String, KeyPair> hash) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, IOException{
+			byte[] firstLine;
+			Cipher aesCipher00 = Cipher.getInstance("RSA");
+			aesCipher00.init(Cipher.ENCRYPT_MODE, hash.get("ky0").getPublic());
+			firstLine = aesCipher00.doFinal();
+			aesCipher00.init(Cipher.ENCRYPT_MODE, hash.get("kx0").getPublic());
+			firstLine = aesCipher00.doFinal();
+			aesCipher00.init(Cipher.ENCRYPT_MODE, hash.get("kz0").getPrivate());
+			//aesCipher00.wrap(hash.get("kz0").getPrivate());
+			firstLine = aesCipher00.doFinal();
+			firstLine = Base64.encodeBase64(firstLine);
+			byte[] secondLine;
+			Cipher aesCipher01 = Cipher.getInstance("RSA");
+			aesCipher01.init(Cipher.ENCRYPT_MODE, hash.get("kx0").getPublic());
+			secondLine = aesCipher01.doFinal();
+			aesCipher01.init(Cipher.ENCRYPT_MODE, hash.get("ky1").getPublic());
+			secondLine = aesCipher01.doFinal();
+			aesCipher01.init(Cipher.ENCRYPT_MODE, hash.get("kz1").getPublic());
+			secondLine = aesCipher01.doFinal();
+			secondLine = Base64.encodeBase64(secondLine);
+			byte[] thirdLine;
+			Cipher aesCipher10 = Cipher.getInstance("RSA");
+			aesCipher10.init(Cipher.ENCRYPT_MODE, hash.get("kx1").getPublic());
+			thirdLine = aesCipher10.doFinal();
+			aesCipher10.init(Cipher.ENCRYPT_MODE, hash.get("ky0").getPublic());
+			thirdLine = aesCipher10.doFinal();
+			aesCipher10.init(Cipher.ENCRYPT_MODE, hash.get("kz1").getPublic());
+			thirdLine = aesCipher10.doFinal();
+			thirdLine = Base64.encodeBase64(thirdLine);
+			byte[] forthLine;
+			Cipher aesCipher11 = Cipher.getInstance("RSA");
+			aesCipher11.init(Cipher.ENCRYPT_MODE, hash.get("kx1").getPublic());
+			forthLine = aesCipher11.doFinal();
+			aesCipher11.init(Cipher.ENCRYPT_MODE, hash.get("ky1").getPublic());
+			forthLine = aesCipher11.doFinal();
+			aesCipher11.init(Cipher.ENCRYPT_MODE, hash.get("kz0").getPublic());
+			forthLine = aesCipher11.doFinal();
+			forthLine = Base64.encodeBase64(forthLine);
+			/*Cipher aesCipher01 = Cipher.getInstance("AES");
+			aesCipher01.init(Cipher.ENCRYPT_MODE, hash.get("kx0").getPublic());
+			aesCipher01.init(Cipher.ENCRYPT_MODE, hash.get("ky1").getPublic());
+			aesCipher01.wrap(hash.get("kz1").getPublic());
+			Cipher aesCipher10 = Cipher.getInstance("AES");
+			aesCipher10.init(Cipher.ENCRYPT_MODE, hash.get("kx1").getPublic());
+			aesCipher10.init(Cipher.ENCRYPT_MODE, hash.get("ky0").getPublic());
+			aesCipher10.wrap(hash.get("kz1").getPublic());
+			Cipher aesCipher11 = Cipher.getInstance("AES");
+			aesCipher11.init(Cipher.ENCRYPT_MODE, hash.get("kx1").getPublic());
+			aesCipher11.init(Cipher.ENCRYPT_MODE, hash.get("ky1").getPublic());
+			aesCipher11.wrap(hash.get("kz0").getPublic());
+			gc.put("line00", aesCipher00);
+			gc.put("line01", aesCipher01);
+			gc.put("line10", aesCipher10);
+			gc.put("line11", aesCipher11);*/
+			//Alice chose two line to send 
+			//it depends on what is the alice bit.
+			if(aliceBit == 1){
+				//Lines with x = 1 need to be sent in bytes
+				garbLineChosen[0] = thirdLine;
+				garbLineChosen[1] = forthLine;
+				System.out.println("oneone");
+
+				
+			}
+			else if(aliceBit == 0){
+				//Lines with x = 0 need to be sent in bytes
+				garbLineChosen[0] = firstLine;
+				garbLineChosen[1] = secondLine;
+				System.out.println("zerozero");
+			}
+		}
+
+		//make alice keyPair, random values and n.
+		static void ot1 (byte[][] lines) throws NoSuchAlgorithmException{
+			System.out.println("the lines corresponding to bit is sent now bob needs to chose one with OT");
+			//p = 3, q = 5 n =15
+			n = 15;
+			KeyPair aliceKey = makeKey();
+			alicePublicKey = aliceKey.getPublic();
+			alicePrivateKey = aliceKey.getPrivate();
+			
+//			new Random().nextBytes(b);
+//			r0 = b[0];
+//			r1 = b[1];
+			r0 = random.nextInt();
+			r1 = random.nextInt();
+			
+		}
+		//make k.
+		static int ot2 (byte[][] lines){
+			//rk = b[2];
+			rk = random.nextInt();
+			//if bob has bit 0 then r0 and so k = 0
+			if(bobBit == 0){
+				System.out.println("Bob has 0");
+				v = (r0 % n);
+			}
+			else if (bobBit == 1){
+				System.out.println("bob has 1");
+				v = ((r1 + 1) % n);
+			}
+			return v;
+		}
+		//alice creates 2 msgs
+		static void ot3 (int vOfBob){
+			
+			 msg0 = garbLineChosen[0].hashCode() + (int) (Math.pow(vOfBob-r0, alicePrivateKey.hashCode()) % n);
+			 msg1 = garbLineChosen[1].hashCode() + (int) (Math.pow(vOfBob-r1, alicePrivateKey.hashCode()) % n);
+			
+		}
+		//bob gets two msg and now he can chose the right one and return it
+		static int ot4(int m0, int m1){
+			
+			if(bobBit == 0){
+				int kb0 = m0-rk;
+				return kb0;
+			}
+			else if (bobBit == 1){
+				int kb1 = m1-rk;
+				return kb1;
+			}
+			return 0;
+		}
+		public static void main (String args[]) throws Exception{
+			String s,t;
+			Scanner in = new Scanner(System.in);
+		    System.out.println("Please enter Alice bit");
+		    s = in.nextLine();
+		    System.out.println("The Alice bit is "+s);
+
+		    System.out.println("Please enter Bob bit");
+		    t = in.nextLine();
+		    System.out.println("The Bob bit is "+t);
+		    aliceBit =Integer.parseInt(s);
+		    bobBit =Integer.parseInt(t);
+		    aliceSixKeys();
+		    doubleEncryption(hm);
+		    //System.out.println(garbLineChosen[0].toString());
+		    //System.out.println(hm.get("kz1").getPublic().toString());
+		  //  System.out.println(hm.toString());
+		   // System.out.println(hm.get("ky0").getPublic());
+		    ot1(garbLineChosen);
+		    System.out.println(alicePublicKey.getFormat());
+		    ot3(ot2(garbLineChosen));
+		   
+		}
+
+
+}
