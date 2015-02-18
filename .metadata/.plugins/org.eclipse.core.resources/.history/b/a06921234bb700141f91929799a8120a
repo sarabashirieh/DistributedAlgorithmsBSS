@@ -8,7 +8,7 @@ public class BSSServer {
 
 		try{
 			
-			Registry serverRegistry = LocateRegistry.createRegistry(2005);
+			Registry serverRegistry = LocateRegistry.createRegistry(2004);
 			//we need our implementation
 			BSSImplementation imp = new BSSImplementation();
 			serverRegistry.rebind("BSS", imp);

@@ -1,0 +1,7 @@
+
+public class VClock {
+	
+	public VClock(){
+		
+	}
+}
