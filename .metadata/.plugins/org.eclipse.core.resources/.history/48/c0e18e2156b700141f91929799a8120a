@@ -9,7 +9,6 @@ public class VClock {
 		//id of process, time
 		vc = new HashMap<Integer,Integer>();
 	}
-
 	synchronized public void increase(int processIndex){
 		//value of the current process index
 		int currentValue = vc.get(processIndex);
