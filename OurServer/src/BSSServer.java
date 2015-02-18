@@ -5,8 +5,10 @@ import java.rmi.registry.Registry;
 public class BSSServer {
 
 	public static void main (String[] args){
+
 		try{
-			Registry serverRegistry = LocateRegistry.createRegistry(1099);
+			
+			Registry serverRegistry = LocateRegistry.createRegistry(2004);
 			//we need our implementation
 			BSSImplementation imp = new BSSImplementation();
 			serverRegistry.rebind("BSS", imp);

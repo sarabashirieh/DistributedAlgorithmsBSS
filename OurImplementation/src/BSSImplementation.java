@@ -17,5 +17,15 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 		// TODO Auto-generated method stub
 		return arg0+arg1;
 	}
+	
+	//Send a message
+	public void sendMessage (int recipient, String msg) throws RemoteException{
+		
+	}
+	
+	//Receive a message
+	public void receiveMessage (Message msg) throws RemoteException{
+		
+	}
 
 }
