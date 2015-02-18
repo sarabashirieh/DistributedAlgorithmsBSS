@@ -4,8 +4,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 @SuppressWarnings("serial")
 public class BSSImplementation extends UnicastRemoteObject implements BSSInterface{
-
-	
+	public int myId;
+	public VClock vc = new VClock();
 
 	protected BSSImplementation() throws RemoteException {
 		super();
@@ -19,8 +19,12 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 	}
 	
 	//Send a message(create a msg and send it)
-	public void sendMessage (int recipient, String msg) throws RemoteException{
-		
+	public void sendMessage (int recipient, String text) throws RemoteException{
+		synchronized(vc){
+			vc.increase(myId);
+			Message msg = new Message(myId, recipient, vc, text);
+			
+		}
 	}
 	
 	//Receive a message
