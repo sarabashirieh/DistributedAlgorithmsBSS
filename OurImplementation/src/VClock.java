@@ -29,7 +29,7 @@ public class VClock {
 		
 	}
 	public static void main(String args[]){
-		System.out.println("hello"+vc);
+		System.out.println("hii"+vc);
 	}
 	
 }
