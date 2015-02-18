@@ -18,7 +18,7 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 		return arg0+arg1;
 	}
 	
-	//Send a message
+	//Send a message(create a msg and send it)
 	public void sendMessage (int recipient, String msg) throws RemoteException{
 		
 	}

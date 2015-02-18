@@ -3,13 +3,15 @@ import java.util.HashMap;
 
 public class VClock {
 	//I chose for hashmap because It does not sort and we can use it's key,value property.
-	private HashMap<Integer, Integer> vc;
+	private static HashMap<Integer, Integer> vc;
 	
 	public VClock(){
 		//id of process, time
 		vc = new HashMap<Integer,Integer>();
 	}
-
+//	public initializeClock(){
+//		
+//	}
 	synchronized public void increase(int processIndex){
 		//value of the current process index
 		int currentValue = vc.get(processIndex);
@@ -25,6 +27,9 @@ public class VClock {
 	}
 	synchronized public void set(){
 		
+	}
+	public static void main(String args[]){
+		System.out.println("hello"+vc);
 	}
 	
 }
