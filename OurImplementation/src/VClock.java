@@ -17,7 +17,7 @@ public class VClock {
 		System.out.println("A new vector clock is initialized.");
 	}
 	synchronized public void increase(int processIndex){
-		//value of the current process index
+		//value of the current process index which is senderId or receiverId
 		int currentValue = vc.get(processIndex);
 		vc.put(processIndex, currentValue+1);
 	}
