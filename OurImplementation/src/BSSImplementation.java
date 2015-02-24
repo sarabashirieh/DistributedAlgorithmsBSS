@@ -19,20 +19,9 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 		return arg0+arg1;
 	}
 	
-	//Send a message(create a msg and send it)
-
-	public String sendMessage (int recipient, String text) throws RemoteException{
-		synchronized(vc){
-			//increase the vector clock
-			vc.increase(myId);
-			//create a zero clock for the beginning of the process 
-			//VClock vcZero = new VClock();
-			//vcZero.startClock();
-			Message msg = new Message(myId, recipient, vc, text);
-			//where should I send it?!
-			return msg.showMessage();
-			
-		}
+	public String sendMessage(int recipient, int sender, Message msg, VClock vm) throws RemoteException{
+		
+		return "Messeage: "+ msg.showMessage();
 	}
 	
 	//Receive a message
@@ -66,5 +55,8 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 	public String deliverTheMsg(Message msg){
 		return "This message is delivered"+msg.showMessage();
 	}
+
+	
+
 
 }

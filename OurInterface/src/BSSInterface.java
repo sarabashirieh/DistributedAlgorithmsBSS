@@ -9,7 +9,7 @@ public interface BSSInterface extends Remote{
 	public int add (int num1, int num2) throws RemoteException;
 	
 	//Send a message
-	public String sendMessage (int recipient, String msg) throws RemoteException;
+	public String sendMessage (int recipient, int sender, Message msg, VClock vm) throws RemoteException;
 	
 	
 	//Receive a message

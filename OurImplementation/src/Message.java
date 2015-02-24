@@ -6,14 +6,14 @@ public class Message {
 	public VClock time;
 	public String text;
 	//create a message
-	public Message (int senderId, int receiverId, VClock time, String text){
+	public Message (int senderId, int receiverId, VClock time, String msg){
 		this.senderId = senderId;
 		this.receiverId = receiverId;
 		this.time = time;
-		this.text = text;
+		this.text = msg;
 	}
 	public String showMessage(){
-		String message = "Content of the message:"+text+"Vclock:"+time+"senderId:"+senderId+"receiverId:"+receiverId;
+		String message = "Content of the message: "+text+", vm: "+time.showClock()+", senderId: "+senderId+" ,receiverId:"+receiverId;
 		return message;
 	}
 }
