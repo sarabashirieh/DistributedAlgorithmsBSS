@@ -4,19 +4,19 @@
 		<item value="190" key="DIALOG_Y_ORIGIN"/>
 		<item value="217" key="DIALOG_X_ORIGIN"/>
 	</section>
+	<section name="ExternalProjectImportWizard">
+	</section>
 	<section name="WORKBENCH_SETTINGS">
 		<list key="ENABLED_TRANSFERS">
 		</list>
 	</section>
-	<section name="ExternalProjectImportWizard">
-	</section>
 	<section name="CleanDialogSettings">
 		<item value="484" key="DIALOG_WIDTH"/>
 		<item value="true" key="BUILD_NOW"/>
-		<item value="true" key="BUILD_ALL"/>
 		<item value="138" key="DIALOG_Y_ORIGIN"/>
-		<item value="391" key="DIALOG_X_ORIGIN"/>
+		<item value="true" key="BUILD_ALL"/>
 		<item value="423" key="DIALOG_HEIGHT"/>
+		<item value="391" key="DIALOG_X_ORIGIN"/>
 		<item value="true" key="TOGGLE_SELECTED"/>
 	</section>
 </section>

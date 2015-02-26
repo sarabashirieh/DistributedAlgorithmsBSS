@@ -4,13 +4,17 @@ import java.rmi.server.UnicastRemoteObject;
 
 @SuppressWarnings("serial")
 public class BSSImplementation extends UnicastRemoteObject implements BSSInterface{
-	public int myId;
-	public VClock vc = new VClock();
-	public Buffer buffer;
+	public  int myId;
+	public  VClock vc = new VClock();
+	public  Buffer buffer;
 
-	protected BSSImplementation() throws RemoteException {
-		super();
+	protected BSSImplementation(int myId, VClock vc, Buffer buffer) throws RemoteException {
+		//super();
 		// TODO Auto-generated constructor stub
+		this.myId = myId;
+		this.vc = vc;
+		this.buffer = buffer;
+	
 	}
 
 	@Override
@@ -25,14 +29,16 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 	}
 	
 	//Receive a message
-	public void receiveMessage (Message msg) throws RemoteException{
-		synchronized(vc){
+	public void receiveMessage (Message msg, VClock vm) throws RemoteException{
+		
 			//condition for D_j(m) of lecture notes
-			vc.increase(msg.receiverId);
+			vm.increase(1);
 			//increase of localvc should be greater equal than vectorclock from the message
-			Boolean condition = ( vc.get(msg.receiverId) >= msg.time.get(msg.senderId));
+			System.out.println("vc.get(1)"+vm.get(1));
+			System.out.println("msg.time.get(msg.senderId)"+ msg.time.get(1));
+			Boolean condition = ( vm.get(1) >= msg.time.get(msg.senderId));
 			if (condition){
-				deliverTheMsg(msg);
+				System.out.println(deliverTheMsg(msg));
 				//now check the buffer for more msg which satisfy the condition
 				for(int i=0;i<buffer.size();i++ ){
 					Message thisMsg = buffer.get(i);
@@ -48,7 +54,6 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 				buffer.add(msg);
 				System.out.println("Message added to buffer");
 			}
-		}
 		
 	}
 	

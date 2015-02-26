@@ -5,6 +5,9 @@ public interface BSSInterface extends Remote{
 
 	//dummy signature method to test the whole rmi
 	//This is our process Interface
+	public  int myId = 0;
+	public  VClock vc = new VClock();
+	public  Buffer buffer = new Buffer();
 	
 	public int add (int num1, int num2) throws RemoteException;
 	
@@ -13,5 +16,5 @@ public interface BSSInterface extends Remote{
 	
 	
 	//Receive a message
-	public void receiveMessage (Message msg) throws RemoteException;
+	public void receiveMessage (Message msg, VClock vm) throws RemoteException;
 }
