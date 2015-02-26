@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 public class VClock {
 	//I chose for hashmap because It does not sort and we can use it's key,value property.
-	public static HashMap<Integer, Integer> vc = new HashMap<Integer,Integer>() ;
+	public  HashMap<Integer, Integer> vc = new HashMap<Integer,Integer>() ;
 	
 	public VClock(){
 		//id of process, time
@@ -69,11 +69,11 @@ public class VClock {
 		return "something is wrong with the clock content!";
 	}
 
-	public static void main(String args[]){
-		VClock c  = new VClock(); 
-		c.intializeClockWithNumberOfProcess(1);
-		c.increase(1);
-		System.out.println(c.showClock());
-	}
+//	public void main(String args[]){
+//		VClock c  = new VClock(); 
+//		c.intializeClockWithNumberOfProcess(1);
+//		c.increase(1);
+//		System.out.println(c.showClock());
+//	}
 	
 }
