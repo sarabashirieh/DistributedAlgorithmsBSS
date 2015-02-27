@@ -8,9 +8,13 @@ public class BSSServer {
 
 		try{
 			
-			Registry serverRegistry = LocateRegistry.createRegistry(2005);
+			Registry serverRegistry = LocateRegistry.createRegistry(2004);
+			VClock p1Clock = new VClock();
+			Buffer b1 = new Buffer();
+			BSSImplementation imp1 = new BSSImplementation(1,p1Clock,b1);
+			serverRegistry.rebind("BSS", imp1);
 			//initialize the global clock and process clocks
-			VClock globalClock = new VClock();
+			/*VClock globalClock = new VClock();
 			VClock p1Clock = new VClock();
 			VClock p2Clock = new VClock();
 			VClock p3Clock = new VClock();
@@ -69,7 +73,7 @@ public class BSSServer {
 			 
 		//	 System.out.println("temp + temp = " + p2Interface.add(temp, temp));
 			 
-			
+			*/
 			 
 		}
 		catch(Exception ex){
