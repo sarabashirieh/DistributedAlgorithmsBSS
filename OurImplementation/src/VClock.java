@@ -1,7 +1,11 @@
 import java.util.HashMap;
 
 
-public class VClock {
+public class VClock implements java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//I chose for hashmap because It does not sort and we can use it's key,value property.
 	public  HashMap<Integer, Integer> vc = new HashMap<Integer,Integer>() ;
 	

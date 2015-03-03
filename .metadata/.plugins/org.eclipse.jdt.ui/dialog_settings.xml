@@ -37,6 +37,8 @@
 		<list key="JarPackageWizardPage.DESTINATION_NAMES_ID">
 			<item value="/Users/SarahBashirieh/Documents/workspace/OurImplements.jar"/>
 			<item value="/Users/SarahBashirieh/Documents/workspace/OurInterface.jar"/>
+			<item value="/Users/SarahBashirieh/Documents/workspace/Client.jar"/>
+			<item value="/Users/SarahBashirieh/Documents/workspace/Process.jar"/>
 			<item value="/Users/SarahBashirieh/Documents/workspace/OurImplementation.jar"/>
 		</list>
 	</section>

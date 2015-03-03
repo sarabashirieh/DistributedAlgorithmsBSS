@@ -1,5 +1,6 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 
 public interface BSSInterface extends Remote{
 
@@ -8,6 +9,8 @@ public interface BSSInterface extends Remote{
 	public  int myId = 0;
 	public  VClock vc = new VClock();
 	public  Buffer buffer = new Buffer();
+	public BSSClient client = new BSSClient();
+	public HashMap<String, Integer> telefoonbook = new HashMap<String, Integer>();
 	
 	public int add (int num1, int num2) throws RemoteException;
 	

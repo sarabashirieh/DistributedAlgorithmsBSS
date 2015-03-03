@@ -1,6 +1,10 @@
 //The message needs to have a senderId, receiverId, VectorClock and text. 
-public class Message {
+public class Message implements java.io.Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public int senderId;
 	public int receiverId;
 	public VClock time;

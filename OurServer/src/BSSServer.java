@@ -1,20 +1,47 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.HashMap;
 
 
 public class BSSServer {
+	//Read the process names and ids from a file and register them. 
+	public static void register(){
+		try{
+			Registry serverRegistry = LocateRegistry.createRegistry(2004);
+			Initialize ini = new Initialize();
+			HashMap<String, Integer> pNameAndIds = new HashMap<String, Integer>();	
+			BSSClient client = new BSSClient();
+			//I've got the process names and processIds 
+			pNameAndIds = ini.phonebook();
+			//register all my processes to the server
+			for (String key : pNameAndIds.keySet()){
+				VClock pClock = new VClock();
+				Buffer b = new Buffer();
+				BSSImplementation s = new BSSImplementation(pNameAndIds.get(key),pClock,b,client,pNameAndIds);
+				serverRegistry.rebind(key, s);
+				System.out.println(key);
+			}
+			System.out.println("All processes are registered!");
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
 
 	public static void main (String[] args){
 
 		try{
+			register();
 			
-			Registry serverRegistry = LocateRegistry.createRegistry(2004);
-			VClock p1Clock = new VClock();
+			/*VClock p1Clock = new VClock();
 			Buffer b1 = new Buffer();
 			BSSImplementation imp1 = new BSSImplementation(1,p1Clock,b1);
-			serverRegistry.rebind("BSS", imp1);
-			//initialize the global clock and process clocks
-			/*VClock globalClock = new VClock();
+			serverRegistry.rebind("BSS", imp1);*/
+			//read file to get list of processes (name, ip, xxx, xxx)
+			//for each of processes, reg it to rmi
+			
+			
+			/*
 			VClock p1Clock = new VClock();
 			VClock p2Clock = new VClock();
 			VClock p3Clock = new VClock();

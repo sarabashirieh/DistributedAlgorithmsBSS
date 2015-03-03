@@ -1,5 +1,6 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
 
 
 @SuppressWarnings("serial")
@@ -7,13 +8,19 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 	public  int myId;
 	public  VClock vc = new VClock();
 	public  Buffer buffer;
+	//public contact`list
+	//private BSSClient;
+	public BSSClient client = new BSSClient();
+	public HashMap<String, Integer> telefoonbook = new HashMap<String, Integer>();
 
-	protected BSSImplementation(int myId, VClock vc, Buffer buffer) throws RemoteException {
+	protected BSSImplementation(int myId, VClock vc, Buffer buffer, BSSClient client, HashMap<String, Integer> telefoonbook ) throws RemoteException {
 		//super();
 		// TODO Auto-generated constructor stub
 		this.myId = myId;
 		this.vc = vc;
 		this.buffer = buffer;
+		this.client = client;
+		this.telefoonbook = telefoonbook;
 	
 	}
 
@@ -26,9 +33,11 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 	public String sendMessage(int recipient, int sender, Message msg, VClock vm) throws RemoteException{
 		
 		return "Messeage: "+ msg.showMessage();
+		// sendmsg(recipient, msg);
 	}
 	
 	//Receive a message
+	//listening
 	public void receiveMessage (Message msg, VClock vm) throws RemoteException{
 		
 			//condition for D_j(m) of lecture notes
