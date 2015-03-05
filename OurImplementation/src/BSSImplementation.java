@@ -32,14 +32,26 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 	
 	public String sendMessage(int recipient, int sender, Message msg, VClock vm) throws RemoteException{
 		
-		return "Messeage: "+ msg.showMessage();
+		System.out.println(receiveMessage(msg,vm));
+		System.out.println("send message");
+		return ("Messeage: "+ msg.showMessage());
 		// sendmsg(recipient, msg);
+		
 	}
 	
 	//Receive a message
 	//listening
-	public void receiveMessage (Message msg, VClock vm) throws RemoteException{
+	public String receiveMessage (Message msg, VClock vm) throws RemoteException{
 		
+		    // delay
+		
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	
 			//condition for D_j(m) of lecture notes
 			vm.increase(1);
 			//increase of localvc should be greater equal than vectorclock from the message
@@ -63,7 +75,7 @@ public class BSSImplementation extends UnicastRemoteObject implements BSSInterfa
 				buffer.add(msg);
 				System.out.println("Message added to buffer");
 			}
-		
+			return "hello!";
 	}
 	
 	public String deliverTheMsg(Message msg){

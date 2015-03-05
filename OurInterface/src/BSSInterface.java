@@ -19,5 +19,5 @@ public interface BSSInterface extends Remote{
 	
 	
 	//Receive a message
-	public void receiveMessage (Message msg, VClock vm) throws RemoteException;
+	public String receiveMessage (Message msg, VClock vm) throws RemoteException;
 }
